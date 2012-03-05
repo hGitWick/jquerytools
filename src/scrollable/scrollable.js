@@ -32,6 +32,7 @@
 			size: 1,
 			speed: 400,
 			vertical: false,
+			centered: false,
 			touch: true,
 			wheelSpeed: 0
 		} 
@@ -170,8 +171,14 @@
 					if (e.isDefaultPrevented() || !item.length) { return self; }			
 				}  
 	
-				var props = vertical ? {top: -item.position().top} : {left: -item.position().left};  
-				
+				var props = vertical
+					? (centered
+						? {top: -item.position().top + (root.height() / 2 - item.height() / 2) }
+						: {top: -item.position().top})
+					: (centered
+						? {left: -item.position().left + (root.width() / 2 - item.width() / 2) }
+						: {left: -item.position().left});
+
 				index = i;
 				current = self;  
 				if (time === undefined) { time = conf.speed; }   
@@ -340,7 +347,7 @@
 		}
 		
 		// initial index
-		if (conf.initialIndex) {
+		if (conf.initialIndex || conf.centered) {
 			self.seekTo(conf.initialIndex, 0, function() {});
 		}
 	} 
